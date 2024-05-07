@@ -1,102 +1,78 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import plotly.express as px
-import plotly.graph_objects as px
+import streamlit as st
 
 # reading the database
 data = pd.read_csv("tips.csv")
  
 # printing the top 10 rows
-# display(data.head(10))
+st.write("Top 10 Rows:", data.head(10))
 
 ## SCATTER PLOT
 # Scatter plot with day against tip
 plt.scatter(data['day'], data['tip'])
-
-# Adding Title to the Plot
 plt.title("Scatter Plot")
-
-# Setting the X and Y labels
 plt.xlabel('Day')
 plt.ylabel('Tip')
+st.pyplot()
 
-plt.show()
-
-# Scatter plot with day against tip
-plt.scatter(data['day'], data['tip'], c=data['size'], 
-            s=data['total_bill'])
- 
-# Adding Title to the Plot
-plt.title("Scatter Plot")
- 
-# Setting the X and Y labels
+# Scatter plot with day against tip and additional size and color
+plt.scatter(data['day'], data['tip'], c=data['size'], s=data['total_bill'])
+plt.title("Scatter Plot with Size and Color")
 plt.xlabel('Day')
 plt.ylabel('Tip')
- 
 plt.colorbar()
- 
-plt.show()
+st.pyplot()
 
-# Scatter plot with day against tip
+# Line plot of tip and size
 plt.plot(data['tip'])
 plt.plot(data['size'])
- 
-# Adding Title to the Plot
-plt.title("Scatter Plot")
- 
-# Setting the X and Y labels
-plt.xlabel('Day')
-plt.ylabel('Tip')
- 
-plt.show()
+plt.title("Line Plot")
+plt.xlabel('Index')
+plt.ylabel('Value')
+st.pyplot()
 
 # Bar chart with day against tip
 plt.bar(data['day'], data['tip'])
- 
 plt.title("Bar Chart")
- 
-# Setting the X and Y labels
 plt.xlabel('Day')
 plt.ylabel('Tip')
- 
-# Adding the legends
-plt.show()
+st.pyplot()
 
-# histogram of total_bills
+# Histogram of total_bills
 plt.hist(data['total_bill'])
- 
 plt.title("Histogram")
- 
-# Adding the legends
-plt.show()
+plt.xlabel('Total Bill')
+plt.ylabel('Frequency')
+st.pyplot()
 
-# draw lineplot
+# Line plot using seaborn
 sns.lineplot(x="sex", y="total_bill", data=data)
-# setting the title using Matplotlib
-plt.title('Title using Matplotlib Function')
-plt.show()
+plt.title('Line Plot using Seaborn')
+st.pyplot()
 
-sns.scatterplot(x='day', y='tip', data=data,)
-plt.show()
+# Scatter plot using seaborn
+sns.scatterplot(x='day', y='tip', data=data)
+plt.title('Scatter Plot using Seaborn')
+st.pyplot()
 
-sns.scatterplot(x='day', y='tip', data=data,)
-plt.show()
+# Scatter plot using seaborn with hue
+sns.scatterplot(x='day', y='tip', data=data, hue='sex')
+plt.title('Scatter Plot with Hue using Seaborn')
+st.pyplot()
 
-sns.scatterplot(x='day', y='tip', data=data,
-               hue='sex')
-plt.show()
-
+# Line plot using seaborn
 sns.lineplot(x='day', y='tip', data=data)
-plt.show()
+plt.title('Line Plot using Seaborn')
+st.pyplot()
 
-# using only data attribute
-sns.lineplot(data=data.drop(['total_bill'], axis=1))
-plt.show()
+# Bar plot using seaborn with hue
+sns.barplot(x='day',y='tip', data=data, hue='sex')
+plt.title('Bar Plot with Hue using Seaborn')
+st.pyplot()
 
-sns.barplot(x='day',y='tip', data=data, 
-            hue='sex')
-plt.show()
-
+# Histogram using seaborn with hue
 sns.histplot(x='total_bill', data=data, kde=True, hue='sex')
-plt.show()
+plt.title('Histogram with Hue using Seaborn')
+st.pyplot()
