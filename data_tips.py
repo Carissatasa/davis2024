@@ -100,26 +100,6 @@ plt.show()
 
 sns.histplot(x='total_bill', data=data, kde=True, hue='sex')
 plt.show()
-
-# plotting the scatter chart
-fig = px.scatter(data, x="day", y="tip", color='sex')
-# showing the plot
-fig.show()
-
-# plotting the scatter chart
-fig = px.line(data, y='tip', color='sex')
- 
-# showing the plot
-fig.show()
-
-# plotting the scatter chart
-fig = px.bar(data, x='day', y='tip', color='sex')
- 
-# showing the plot
-fig.show()
-
-# plotting the scatter chart
-fig = px.histogram(data, x='total_bill', color='sex')
  
 # showing the plot
 fig.show()
