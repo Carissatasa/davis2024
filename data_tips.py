@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
+st.header("Hai!")
+st.write("Ini hasil deploy data TIPS di Streamlit")
+st.write("Nama : Carissa Renatasari \n NPM : 21082010041")
+
 # reading the database
 data = pd.read_csv("tips.csv")
  
