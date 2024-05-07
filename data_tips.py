@@ -100,6 +100,3 @@ plt.show()
 
 sns.histplot(x='total_bill', data=data, kde=True, hue='sex')
 plt.show()
- 
-# showing the plot
-fig.show()
