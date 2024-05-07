@@ -8,7 +8,7 @@ import plotly.graph_objects as px
 data = pd.read_csv("tips.csv")
  
 # printing the top 10 rows
-display(data.head(10))
+# display(data.head(10))
 
 ## SCATTER PLOT
 # Scatter plot with day against tip
