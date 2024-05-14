@@ -82,7 +82,7 @@ with st.sidebar:
     df_selected_year_sorted = df_selected_year.sort_values(by="population", ascending=False)
 
     color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
-    selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
+    selected_color_theme = st.selectbox('Select a color theme', color_theme_list) #!! SELECT WARNA
 
 
 #######################
@@ -242,10 +242,10 @@ with col[0]:
 with col[1]:
     st.markdown('#### Total Population')
     
-    choropleth = make_choropleth(df_selected_year, 'states_code', 'population', selected_color_theme)
+    choropleth = make_choropleth(df_selected_year, 'states_code', 'population', selected_color_theme) ## GANTI DI CHOROPLETH
     st.plotly_chart(choropleth, use_container_width=True)
     
-    heatmap = make_heatmap(df_reshaped, 'year', 'states', 'population', selected_color_theme)
+    heatmap = make_heatmap(df_reshaped, 'year', 'states', 'population', selected_color_theme) ## GANTI DI HEATMAP
     st.altair_chart(heatmap, use_container_width=True)
     
 
