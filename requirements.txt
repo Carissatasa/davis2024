@@ -12,3 +12,4 @@ pymysql
 SQLAlchemy
 scipy
 mysql.connector
+altair
