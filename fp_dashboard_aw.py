@@ -133,58 +133,6 @@ else:
 
         mycursor.execute(query_line_chart)
         line_chart_result = mycursor.fetchall()
-        
-        # Query khusus untuk line chart
-        # query_line_chart = """
-        # select YEAR(t.FullDateAlternateKey) AS OrderYear, SUM(f.OrderQuantity) AS ProductSold
-        #     from factinternetsales f 
-        #     join dimtime t on f.OrderDateKey = t.TimeKey 
-        #     join dimproduct p on f.ProductKey = p.ProductKey 
-        #     join dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey 
-        #     join dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey 
-        #     WHERE pc.EnglishProductCategoryName = '{selected_category}'
-        #     GROUP BY YEAR(t.FullDateAlternateKey)
-        #     ORDER BY OrderYear;
-        # """
-
-    # # Query untuk mendapatkan data penjualan berdasarkan bulan dan kategori produk
-    # query_sales = f"""
-    # SELECT 
-    #     MONTH(t.FullDateAlternateKey) AS OrderMonth,
-    #     SUM(f.OrderQuantity) AS TotalProductSold,
-    #     count(distinct c.CustomerKey) AS TotalCustomer,
-    #     st.SalesTerritoryRegion AS Region,
-    #     p.EnglishProductName AS ProductName,
-    #     psc.EnglishProductSubcategoryName AS ProductSubCategory,
-    #     pc.EnglishProductCategoryName AS ProductCategory,
-    #     c.CustomerKey AS CustomerKey,
-    #     c.Gender as Gender,
-    #     p.ProductKey AS ProductKey
-    # FROM 
-    #     factinternetsales f 
-    # JOIN 
-    #     dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey 
-    # JOIN 
-    #     dimcustomer c on f.CustomerKey = c.CustomerKey
-    # JOIN 
-    #     dimtime t ON f.OrderDateKey = t.TimeKey 
-    # JOIN 
-    #     dimproduct p ON f.ProductKey = p.ProductKey 
-    # JOIN 
-    #     dimproductsubcategory psc ON p.ProductSubcategoryKey = psc.ProductSubcategoryKey 
-    # JOIN 
-    #     dimproductcategory pc ON psc.ProductCategoryKey = pc.ProductCategoryKey 
-    # WHERE 
-    #     pc.EnglishProductCategoryName = '{selected_category}'
-    # GROUP BY 
-    #     OrderMonth, Region, ProductName, ProductSubCategory, ProductCategory, CustomerKey, Gender, ProductKey
-    # ORDER BY 
-    #     OrderMonth;
-    # """
-    # mycursor.execute(query_sales)
-    # myresult = mycursor.fetchall()
-
-
     
     # Tutup cursor dan koneksi
     mycursor.close()
@@ -200,7 +148,7 @@ else:
 col1, col2 = st.columns((1.5, 3), gap='medium')
 
 with col1:
-    st.markdown(f'#### Total Product Sold in selected_category')
+    st.markdown(f'#### Total Product Sold in {selected_category}')
     product_sold_sum = int(df_sales["TotalProductSold"].sum()) if not df_sales.empty else 0
     st.metric(label="Number of Products", value=product_sold_sum)
     
@@ -228,7 +176,7 @@ with col2:
     #     )
     #     st.altair_chart(line_chart, use_container_width=True)
         
-    # Line Chart Total Sales per Bulan dengan Plotly
+    # Line Chart Total Sales per Tahun
     st.markdown('#### Total Product Sold per Year')
     if not df_line_chart.empty:
         line_chart = px.line(df_line_chart, x='OrderYear', y='TotalProductSold', width=600, height=400, markers=True, range_x=[2001, 2004])
@@ -236,12 +184,17 @@ with col2:
 
     # Pie Chart Total Customer by Region
     if not df_sales.empty:
+        # DataFrame Total Customer by Region
+        total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
+        total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
+        st.write(total_cust)
+        
         st.markdown('#### Total Customer by Region')
         pie_chart = px.pie(df_sales, values='TotalCustomer', names='Region')
         pie_chart.update_layout(width=600)
         st.plotly_chart(pie_chart)
 
-    # Menampilkan histogram tipe kartu kredit
+    # Menampilkan histogram ProductSubCategory
     st.markdown('#### ProductSubCategory Histogram')
     hist_chart = px.histogram(df_sales, x='ProductSubCategory', labels={'ProductSubCategory': 'Product Subcategory', 'count': 'Frequency'})
     hist_chart.update_layout(width=600)
