@@ -1,4 +1,4 @@
-import mysql.connector
+import pymysql
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -26,14 +26,14 @@ def format_number(num):
 #######################
 # Koneksi ke database
 try:
-    mydb = mysql.connector.connect(
+    mydb = pymysql.connect(
         host="kubela.id",
         user="davis2024irwan",
         passwd="wh451n9m@ch1n3",
         port=3306,
         database="aw"
     )
-except mysql.connector.Error as err:
+except pymysql.Error as err:
     st.error(f"Error: {err}")
 else:
     mycursor = mydb.cursor()
@@ -200,7 +200,7 @@ else:
 col1, col2 = st.columns((1.5, 3), gap='medium')
 
 with col1:
-    st.markdown(f'#### Total Product Sold in {selected_category}')
+    st.markdown(f'#### Total Product Sold in selected_category')
     product_sold_sum = int(df_sales["TotalProductSold"].sum()) if not df_sales.empty else 0
     st.metric(label="Number of Products", value=product_sold_sum)
     
