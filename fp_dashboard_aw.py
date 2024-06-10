@@ -162,9 +162,9 @@ with col1:
         st.write("No data available.")
         
     # DataFrame Total Customer by Region
-        total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
-        total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
-        st.write(total_cust)
+    total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
+    total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
+    st.write(total_cust)
     
 
 with col2:
