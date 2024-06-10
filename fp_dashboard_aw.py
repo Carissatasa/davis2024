@@ -153,13 +153,18 @@ with col1:
     st.metric(label="Number of Products", value=product_sold_sum)
     
     # DataFrame Product Terlaris
-    st.markdown('#### Top 10 Best Selling Products')
+    st.markdown('#### Top 5 Best Selling Products')
     if not df_sales.empty:
         top_product = df_sales.groupby("ProductName").agg({"TotalProductSold": "sum"})
-        top_product = top_product.sort_values(by="TotalProductSold", ascending=False).head(10)
+        top_product = top_product.sort_values(by="TotalProductSold", ascending=False).head(5)
         st.write(top_product)
     else:
         st.write("No data available.")
+        
+    # DataFrame Total Customer by Region
+        total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
+        total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
+        st.write(total_cust)
     
 
 with col2:
@@ -184,11 +189,6 @@ with col2:
 
     # Pie Chart Total Customer by Region
     if not df_sales.empty:
-        # DataFrame Total Customer by Region
-        total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
-        total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
-        st.write(total_cust)
-        
         st.markdown('#### Total Customer by Region')
         pie_chart = px.pie(df_sales, values='TotalCustomer', names='Region')
         pie_chart.update_layout(width=600)
