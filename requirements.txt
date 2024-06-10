@@ -11,3 +11,4 @@ openpyxl
 pymysql
 SQLAlchemy
 scipy
+mysql.connector
