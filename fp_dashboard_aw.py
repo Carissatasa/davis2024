@@ -30,7 +30,7 @@ try:
         host="kubela.id",
         user="davis2024irwan",
         password="wh451n9m@ch1n3",  # Ganti dengan password yang benar jika diperlukan
-        database="dump-dw_aw-202403050806"  # Pastikan nama database sudah benar
+        database="aw"  # Pastikan nama database sudah benar
     )
 except mysql.connector.Error as err:
     st.error(f"Error: {err}")
