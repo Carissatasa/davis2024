@@ -147,7 +147,7 @@ else:
 col1, col2 = st.columns((1.5, 3), gap='medium')
 
 with col1:
-    st.markdown(f'#### Total Product Sold in {selected_category}')
+    st.markdown(f'#### Total Product Sold in selected_category')
     product_sold_sum = int(df_sales["TotalProductSold"].sum()) if not df_sales.empty else 0
     st.metric(label="Number of Products", value=product_sold_sum)
     
