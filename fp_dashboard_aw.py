@@ -61,7 +61,6 @@ else:
         if selected_category == 'All':
             query_sales = """
             SELECT 
-                MONTH(t.FullDateAlternateKey) AS OrderMonth,
                 SUM(f.OrderQuantity) AS TotalProductSold,
                 count(distinct c.CustomerKey) AS TotalCustomer,
                 st.SalesTerritoryRegion AS Region,
@@ -72,14 +71,12 @@ else:
                 c.Gender as Gender,
                 p.ProductKey AS ProductKey
             FROM factinternetsales f 
-            JOIN dimtime t ON f.OrderDateKey = t.TimeKey 
             JOIN dimproduct p ON f.ProductKey = p.ProductKey 
             JOIN dimproductsubcategory psc ON p.ProductSubcategoryKey = psc.ProductSubcategoryKey 
             JOIN dimproductcategory pc ON psc.ProductCategoryKey = pc.ProductCategoryKey
             JOIN dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey 
             JOIN dimcustomer c on f.CustomerKey = c.CustomerKey
-            GROUP BY OrderMonth, Region, ProductName, ProductSubCategory, ProductCategory, CustomerKey, Gender, ProductKey
-            ORDER BY OrderMonth;
+            GROUP BY Region, ProductName, ProductSubCategory, ProductCategory, CustomerKey, Gender, ProductKey;
             """
             
             query_line_chart = """
@@ -95,7 +92,6 @@ else:
         else:
             query_sales = f"""
             SELECT 
-                YEAR(t.FullDateAlternateKey) AS OrderYear,
                 SUM(f.OrderQuantity) AS TotalProductSold,
                 count(distinct c.CustomerKey) AS TotalCustomer,
                 st.SalesTerritoryRegion AS Region,
@@ -106,15 +102,13 @@ else:
                 c.Gender as Gender,
                 p.ProductKey AS ProductKey
             FROM factinternetsales f 
-            JOIN dimtime t ON f.OrderDateKey = t.TimeKey 
             JOIN dimproduct p ON f.ProductKey = p.ProductKey 
             JOIN dimproductsubcategory psc ON p.ProductSubcategoryKey = psc.ProductSubcategoryKey 
             JOIN dimproductcategory pc ON psc.ProductCategoryKey = pc.ProductCategoryKey
             JOIN dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey 
             JOIN dimcustomer c on f.CustomerKey = c.CustomerKey
             WHERE pc.EnglishProductCategoryName = '{selected_category}'
-            GROUP BY OrderYear, Region, ProductName, ProductSubCategory, ProductCategory, CustomerKey, Gender, ProductKey
-            ORDER BY OrderYear;
+            GROUP BY Region, ProductName, ProductSubCategory, ProductCategory, CustomerKey, Gender, ProductKey;
             """
             query_line_chart = f"""
             select YEAR(t.FullDateAlternateKey) AS OrderYear, SUM(f.OrderQuantity) AS ProductSold
@@ -139,7 +133,7 @@ else:
     mydb.close()
 
     # Konversi hasil query ke DataFrame
-    df_sales = pd.DataFrame(myresult, columns=["OrderYear", "TotalProductSold", "TotalCustomer", "Region", "ProductName", "ProductSubCategory", "ProductCategory", "CustomerKey", "Gender", "ProductKey"])
+    df_sales = pd.DataFrame(myresult, columns=["TotalProductSold", "TotalCustomer", "Region", "ProductName", "ProductSubCategory", "ProductCategory", "CustomerKey", "Gender", "ProductKey"])
     df_line_chart = pd.DataFrame(line_chart_result, columns=["OrderYear", "TotalProductSold"])
 
 
@@ -160,12 +154,6 @@ with col1:
         st.write(top_product)
     else:
         st.write("No data available.")
-        
-    # DataFrame Total Customer by Region
-    total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
-    total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
-    st.write(total_cust)
-    
 
 with col2:
     # # Line Chart Total Sales per Bulan
@@ -193,6 +181,11 @@ with col2:
         pie_chart = px.pie(df_sales, values='TotalCustomer', names='Region')
         pie_chart.update_layout(width=600)
         st.plotly_chart(pie_chart)
+        
+    # # DataFrame Total Customer by Region
+    # total_cust = df_sales.groupby("Region").agg({"TotalCustomer": "sum"})
+    # total_cust = total_cust.sort_values(by="TotalCustomer", ascending=False)
+    # st.write(total_cust)
 
     # Menampilkan histogram ProductSubCategory
     st.markdown('#### ProductSubCategory Histogram')
