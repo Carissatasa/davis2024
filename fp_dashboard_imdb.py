@@ -3,18 +3,20 @@ import numpy as np
 import pandas as pd
 import altair as alt
 import plotly.express as px
+from PIL import Image
 
 # Page title
 st.set_page_config(page_title='IMDb Top Picks Movie Explorer', page_icon='🎬', layout="wide",
     initial_sidebar_state="expanded")
+
+# Adding a header image
+header_image = Image.open('header2.png')  # Replace with your image path
+st.image(header_image, use_column_width=True)
+
 st.title('🎬 IMDb Movie Explorer')
 
-with st.expander('About this app'):
-  st.markdown('**Source**')
-  st.info('This data was taken from the Top Picks page after accessing the movie entitled "La La Land" on June 8, 2024 at 21.34')
-#   st.markdown('**How to use the app?**')
-#   st.warning('To engage with the app, 1. Select genres of your interest in the drop-down selection box and then 2. Select the year duration from the slider widget. As a result, this should generate an updated editable DataFrame and line plot.')
-  
+st.info('This data was taken from the Top Picks page after accessing the movie entitled "La La Land" on June 8, 2024 at 21.34')
+ 
 st.subheader('What is the best selling movie rated by its genre and gross?')
 
 # Load data
@@ -25,7 +27,6 @@ df['year'] = pd.to_datetime(df['release_date'], format='%Y-%m-%d').dt.year
 #######################
 # Main Panel
 col1, col2 = st.columns((1.8, 3), gap='medium')
-
 
 with col1:
   ## Year selection
@@ -60,6 +61,20 @@ with col1:
   # Display the chart
   st.markdown('#### Top Grossing Movies Each Year')
   st.altair_chart(bar_chart)
+
+  # Create the bar chart
+  bar_chart = alt.Chart(top_gross_per_year).mark_bar().encode(
+      y=alt.Y('year:O', title='Year'),
+      x=alt.X('runtime_minutes:Q', title='Runtime (minutes)'),
+      color='title:N',
+      tooltip=[alt.Tooltip('title', title='Title'), 'year', alt.Tooltip('runtime_minutes:Q', title='Runtime (minutes)')]  # Use pre-formatted column in tooltip
+    ).properties(
+      width='container'
+  )
+
+    # Display the chart
+  st.markdown('#### Runtime of Top Grossing Movies Each Year')
+  st.altair_chart(bar_chart, use_container_width=True)
   
 
 with col2:
@@ -113,28 +128,3 @@ with col2:
   st.markdown('#### The Relationship between Movie Grosses in United States and Worldwide')
   scatter_chart = px.scatter(df, x='gross_us', y='gross_world', color='country_origin')
   st.plotly_chart(scatter_chart, use_container_width=True)
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-
-
