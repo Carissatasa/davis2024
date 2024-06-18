@@ -1,4 +1,4 @@
-import mysql.connector
+import pymysql
 import streamlit as st
 import pandas as pd
 import altair as alt
