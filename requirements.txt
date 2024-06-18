@@ -14,5 +14,3 @@ scipy
 pymysql
 altair
 mysql.connector
-Image
-Decimal
