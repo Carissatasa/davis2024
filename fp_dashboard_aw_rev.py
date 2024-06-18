@@ -28,14 +28,14 @@ def format_number(num):
 #######################
 # Koneksi ke database
 try:
-    mydb = mysql.connector.connect(
+    mydb = pymysql.connect(
         host="kubela.id",
         user="davis2024irwan",
         passwd="wh451n9m@ch1n3",
         port=3306,
         database="aw"
     )
-except mysql.connector.Error as err:
+except pymysql.Error as err:
     st.error(f"Error: {err}")
 else:
     mycursor = mydb.cursor()
