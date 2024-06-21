@@ -10,13 +10,29 @@ st.set_page_config(page_title='IMDb Top Picks Movie Explorer', page_icon='🎬',
     initial_sidebar_state="expanded")
 
 # Adding a header image
-header_image = Image.open('header2.png')  # Replace with your image path
+header_image = Image.open('header2.png')
 st.image(header_image, use_column_width=True)
 
 st.title('🎬 IMDb Movie Explorer')
 
-st.info('This data was taken from the Top Picks page after accessing the movie entitled "La La Land" on June 8, 2024 at 21.34')
- 
+with st.expander('About this app'):
+  st.success('by CARISSA RENATASARI, NPM : 21082010041')  
+  st.info('This data was taken from the Top Picks page after accessing the movie entitled "La La Land" on June 8, 2024 at 21.34')
+  st.warning("**Filtering**\n-  Year range filtering affects Top Grossing Movie Each Year and Runtime of Top Grossing Movie Each Year\n-  Multi-select genres influence Highest Rated Movies, Total Movies Produced by Genre, and Distribution of Movies by Production Company")
+  st.markdown("<span style='font-size:20sp; font-weight:bold;'>VISUALIZATION DESCRIPTION</span>", unsafe_allow_html=True)
+  st.markdown("<span style='color:green; font-weight:bold;'>Top Grossing Movie Each Year</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Comparison - Vertical bar chart\n- Displays the highest-grossing movie for each year")
+  st.markdown("<span style='color:green; font-weight:bold;'> Runtime of Top Grossing Movie Each Year</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Comparison - Horizontal bar chart\n- Shows the duration of each movie that has the highest gross for its year. This visualization can be used to analyze whether the duration of a movie affects its gross.")
+  st.markdown("<span style='color:green; font-weight:bold;'>Highest Rated Movies by Selected Genre</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Comparison - Horizontal bar chart\n- Displays movie ratings sorted from highest to lowest based on the selected genres.")
+  st.markdown("<span style='color:green; font-weight:bold;'>Total Movies by Genre</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Composition - Donut chart\n- Shows the number of movies based on the selected genres.")
+  st.markdown("<span style='color:green; font-weight:bold;'>Distribution of Movies by Production Company</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Distribution - Bar histogram\n- Shows the number of movies produced by each production company.")
+  st.markdown("<span style='color:green; font-weight:bold;'>The Relationship between Movie Grosses in the United States and Worldwide</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Relationship - Scatter plot\n- Shows the correlation between a movie's gross in the United States and its gross in worldwide.")
+
 st.subheader('What is the best selling movie rated by its genre and gross?')
 
 # Load data
@@ -89,7 +105,7 @@ with col2:
   top_5_movies = df_selection.drop_duplicates(subset=['title']).nlargest(5, 'rating')
 
   # Membuat bar chart horizontal
-  st.markdown('#### Highest Movie Rating by Selected Genre')
+  st.markdown('#### Highest Rated Movies by Selected Genre')
   chart = alt.Chart(top_5_movies).mark_bar().encode(
       x=alt.X('rating:Q', title='Rating'),
       y=alt.Y('title:N', sort='-x', title='Film Title'),
@@ -113,18 +129,13 @@ with col2:
   pie_chart.update_traces(textinfo='label+value', texttemplate='%{label}: %{value}')
   st.plotly_chart(pie_chart, use_container_width=True)
 
-
-  # Menampilkan histogram tipe kartu kredit
-  st.markdown('#### Production Company Histogram')
+  # Menampilkan histogram
+  st.markdown('#### Distribution of Movies by Production Company')
   hist_chart = px.histogram(df_selection, x='production_company', labels={'production_company': 'Production Company'})
   st.plotly_chart(hist_chart, use_container_width=True)
     
-  # # Scatter plot
-  # st.markdown('#### hubungan budget dengan gross world')
-  # scatter_chart = px.scatter(df, x='budget', y='gross_world', color='certification')
-  # st.plotly_chart(scatter_chart, use_container_width=True) 
-
   # Scatter plot
   st.markdown('#### The Relationship between Movie Grosses in United States and Worldwide')
   scatter_chart = px.scatter(df, x='gross_us', y='gross_world', color='country_origin')
   st.plotly_chart(scatter_chart, use_container_width=True)
+  
