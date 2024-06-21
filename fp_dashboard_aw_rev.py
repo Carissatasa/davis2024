@@ -29,11 +29,10 @@ def format_number(num):
 # Koneksi ke database
 try:
     mydb = pymysql.connect(
-        host="kubela.id",
-        user="davis2024irwan",
-        passwd="wh451n9m@ch1n3",
-        port=3306,
-        database="aw"
+        host=st.secrets["mysql"]["host"],
+        user=st.secrets["mysql"]["user"],
+        passwd=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"]
     )
 except pymysql.Error as err:
     st.error(f"Error: {err}")
