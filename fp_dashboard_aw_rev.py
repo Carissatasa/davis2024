@@ -162,6 +162,27 @@ st.image(header_image, use_column_width=True)
 
 st.markdown("# 🚀 AdventureWorks Sales Dashboard")
 st.markdown("**Welcome to the AdventureWorks Sales Dashboard!** Here you can find insights and analytics on the sales data.")
+with st.expander('About this app'):
+  st.success('by CARISSA RENATASARI, NPM : 21082010041')   
+  st.info('The data used for this visualization are from the AdventureWorks database (dump_aw), specifically the FactInternetSales table')
+  st.warning("**Filtering:** Filtering by product category on the sidebar affects the entire visualization except for the scatter plot")
+  st.markdown("<span style='font-size:20sp; font-weight:bold;'>VISUALIZATION DESCRIPTION</span>", unsafe_allow_html=True)
+  ## Line chart - Total Product Sold per Year
+  st.markdown("<span style='color:green; font-weight:bold;'>Total Product Sold per Year</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Comparison - Line chart \n- **Description:** Displays how the number of products sold changes year over year. \n- **Code:**")
+  st.code("SELECT YEAR(t.FullDateAlternateKey) AS OrderYear, SUM(f.OrderQuantity) AS ProductSold \nFROM factinternetsales f \nJOIN dimtime t on f.OrderDateKey = t.TimeKey \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}' \nGROUP BY YEAR(t.FullDateAlternateKey) \nORDER BY OrderYear;")
+  ## Pie chart
+  st.markdown("<span style='color:green; font-weight:bold;'>Total Customer by Region</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Composition - Pie chart \n- **Description:** Shows the composition of the number of customers based on the region, filtered by the selected product category. \n- **Code:**")
+  st.code("SELECT count(distinct c.CustomerKey),  st.SalesTerritoryRegion , pc.EnglishProductCategoryName \nFROM factinternetsales f \nJOIN dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey \nJOIN dimcustomer c on f.CustomerKey = c.CustomerKey \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}' \nGROUP BY st.SalesTerritoryRegion ;")
+  ## Histogram
+  st.markdown("<span style='color:green; font-weight:bold;'>Distribution of Products by Subcategory</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Distribution - Bar Histogram \n- **Description:** Displays the distribution of product subcategories based on the products sold in the selected product category. \n- **Code:**")
+  st.code("SELECT SUM(f.OrderQuantity) AS ProductSold, psc.EnglishProductSubcategoryName, pc.EnglishProductCategoryName \nFROM factinternetsales f \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}'\nGROUP BY psc.EnglishProductSubcategoryName ;")
+  ## Scatter plot
+  st.markdown("<span style='color:green; font-weight:bold;'>The Relation between Employee's Gender and Rate</span>",unsafe_allow_html=True)
+  st.write("- **Chart type:** Relationship - Scatter Plot \n- **Description:** Shows the correlation between employee gender and the salary received. This visualization answers whether gender affects employee salary. \n- **Code:**")
+  st.code("SELECT EmployeeKey AS EmployeeID, Gender , BaseRate \nFROM dimemployee \nORDER BY EmployeeID;")
 
 # Metrics Row
 col1, col2, col3, col4 = st.columns(4)
@@ -225,13 +246,13 @@ with col2:
         st.plotly_chart(pie_chart)
 
     # Menampilkan histogram ProductSubCategory
-    st.subheader('Distribution Product Subcategory', divider='orange')
+    st.subheader('Distribution of Products by Subcategory', divider='orange')
     hist_chart = px.histogram(df_sales, x='ProductSubCategory', labels={'ProductSubCategory': 'Product Subcategory', 'count': 'Frequency'})
     hist_chart.update_layout(width=600)
     st.plotly_chart(hist_chart)
 
     # Scatter plot
-    st.subheader('Relation between Employee\'s Gender and Rate', divider='orange')
+    st.subheader('The Relation between Employee\'s Gender and Rate', divider='orange')
     scatter_chart = px.scatter(df_scatter, x='EmployeeID', y='BaseRate', color='Gender')
     scatter_chart.update_layout(width=600)
     st.plotly_chart(scatter_chart)
