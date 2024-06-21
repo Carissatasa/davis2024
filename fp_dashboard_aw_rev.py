@@ -163,28 +163,28 @@ st.image(header_image, use_column_width=True)
 st.markdown("# 🚀 AdventureWorks Sales Dashboard")
 st.markdown("**Welcome to the AdventureWorks Sales Dashboard!** Here you can find insights and analytics on the sales data.")
 with st.expander('About this app'):
-  st.success('by CARISSA RENATASARI, NPM : 21082010041')   
-  st.info('The data used for this visualization are from the AdventureWorks database (dump_aw), specifically the FactInternetSales table')
-  st.warning("**Filtering:** Filtering by product category on the sidebar affects the entire visualization except for the scatter plot")
+    st.success('by CARISSA RENATASARI, NPM : 21082010041')   
+    st.info('The data used for this visualization are from the AdventureWorks database (dump_aw), specifically the FactInternetSales table')
+    st.warning("**Filtering:** Filtering by product category on the sidebar affects the entire visualization except for the scatter plot")
     st.success("**Dari dashboard ini, dapat dilihat bahwa..**\n- Dengan filter untuk seluruh kategori produk, dashboard menampilkan informasi total sales, customers, product subcategories, sales regions, dan total product sold pada keseluruhan produk. Total penjualan sejumlah 60ribu berarti untuk semua kategori produk, terjadi transaksi sebanyak 60ribu. Customers sejumlah 18484 berarti jumlah customer yang membeli produk. \n- Total produk yang terjual berjumlah 60398 produk untuk seluruh kategori produk. Lain lagi apabila filter diatur untuk salah satu jenis kategori produk. \n- Dalam dashboard saya juga menampilkan dataframe berisi 10 produk terlaris untuk keseluruhan kategori produk. Lalu saya menampilkan grafik garis untuk menampilkan total produk terjual tiap tahunnya, mulai dari tahun 2001 dengan produk terjual sejumlah 1013 hingga tahun 2004 dengan produk terjual sejumlah lebih dari 32ribu. Artinya terdapat peningkatan jumlah produk terjual dari tahun ke tahun. \n- Terdapat grafik pie yang saya tampilkan untuk mengetahui persebaran asal region dari customer. Paling banyak terlihat pada customer dari region Australia dengan total 22.4% dari 10 region. \n- Untuk keseluruhan kategori produk, grafik histogram menampilkan distribusi produk dilihat dari sub kategorinya. Produk paling banyak tergolong dalam sub kategori Tires and Tubes dengan total lebih dari 15ribu produk. \n- Selanjutnya, grafik scatter plot ditampilkan untuk melihat hubungan antara gender dengan gaji karyawan. Dari grafik ini bisa dilihat bahwa persebaran gaji karyawan cukup merata antara laki-laki dan perempuan. Namun dapat dilihat pula bahwa karyawan dengan gaji tertinggi dimiliki oleh karyawan berjenis kelamin laki-laki. Gaji karyawan perempuan paling tinggi berkisar \$63 sedangkan karyawan laki-laki paling tinggi di angka \$125.5.")
-  st.markdown("<span style='font-size:20sp; font-weight:bold;'>VISUALIZATION DESCRIPTION</span>", unsafe_allow_html=True)
-  ## Line chart - Total Product Sold per Year
-  st.markdown("<span style='color:green; font-weight:bold;'>Total Product Sold per Year</span>",unsafe_allow_html=True)
-  st.write("- **Chart type:** Comparison - Line chart \n- **Description:** Displays how the number of products sold changes year over year. \n- **Code:**")
-  st.code("SELECT YEAR(t.FullDateAlternateKey) AS OrderYear, SUM(f.OrderQuantity) AS ProductSold \nFROM factinternetsales f \nJOIN dimtime t on f.OrderDateKey = t.TimeKey \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}' \nGROUP BY YEAR(t.FullDateAlternateKey) \nORDER BY OrderYear;")
-  ## Pie chart
-  st.markdown("<span style='color:green; font-weight:bold;'>Total Customer by Region</span>",unsafe_allow_html=True)
-  st.write("- **Chart type:** Composition - Pie chart \n- **Description:** Shows the composition of the number of customers based on the region, filtered by the selected product category. \n- **Code:**")
-  st.code("SELECT count(distinct c.CustomerKey),  st.SalesTerritoryRegion , pc.EnglishProductCategoryName \nFROM factinternetsales f \nJOIN dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey \nJOIN dimcustomer c on f.CustomerKey = c.CustomerKey \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}' \nGROUP BY st.SalesTerritoryRegion ;")
-  ## Histogram
-  st.markdown("<span style='color:green; font-weight:bold;'>Distribution of Products by Subcategory</span>",unsafe_allow_html=True)
-  st.write("- **Chart type:** Distribution - Bar Histogram \n- **Description:** Displays the distribution of product subcategories based on the products sold in the selected product category. \n- **Code:**")
-  st.code("SELECT SUM(f.OrderQuantity) AS ProductSold, psc.EnglishProductSubcategoryName, pc.EnglishProductCategoryName \nFROM factinternetsales f \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}'\nGROUP BY psc.EnglishProductSubcategoryName ;")
-  ## Scatter plot
-  st.markdown("<span style='color:green; font-weight:bold;'>The Relation between Employee's Gender and Rate</span>",unsafe_allow_html=True)
-  st.write("- **Chart type:** Relationship - Scatter Plot \n- **Description:** Shows the correlation between employee gender and the salary received. This visualization answers whether gender affects employee salary. \n- **Code:**")
-  st.code("SELECT EmployeeKey AS EmployeeID, Gender , BaseRate \nFROM dimemployee \nORDER BY EmployeeID;")
-
+    st.markdown("<span style='font-size:20sp; font-weight:bold;'>VISUALIZATION DESCRIPTION</span>", unsafe_allow_html=True)
+    ## Line chart - Total Product Sold per Year
+    st.markdown("<span style='color:green; font-weight:bold;'>Total Product Sold per Year</span>",unsafe_allow_html=True)
+    st.write("- **Chart type:** Comparison - Line chart \n- **Description:** Displays how the number of products sold changes year over year. \n- **Code:**")
+    st.code("SELECT YEAR(t.FullDateAlternateKey) AS OrderYear, SUM(f.OrderQuantity) AS ProductSold \nFROM factinternetsales f \nJOIN dimtime t on f.OrderDateKey = t.TimeKey \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}' \nGROUP BY YEAR(t.FullDateAlternateKey) \nORDER BY OrderYear;")
+    ## Pie chart
+    st.markdown("<span style='color:green; font-weight:bold;'>Total Customer by Region</span>",unsafe_allow_html=True)
+    st.write("- **Chart type:** Composition - Pie chart \n- **Description:** Shows the composition of the number of customers based on the region, filtered by the selected product category. \n- **Code:**")
+    st.code("SELECT count(distinct c.CustomerKey),  st.SalesTerritoryRegion , pc.EnglishProductCategoryName \nFROM factinternetsales f \nJOIN dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey \nJOIN dimcustomer c on f.CustomerKey = c.CustomerKey \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}' \nGROUP BY st.SalesTerritoryRegion ;")
+    ## Histogram
+    st.markdown("<span style='color:green; font-weight:bold;'>Distribution of Products by Subcategory</span>",unsafe_allow_html=True)
+    st.write("- **Chart type:** Distribution - Bar Histogram \n- **Description:** Displays the distribution of product subcategories based on the products sold in the selected product category. \n- **Code:**")
+    st.code("SELECT SUM(f.OrderQuantity) AS ProductSold, psc.EnglishProductSubcategoryName, pc.EnglishProductCategoryName \nFROM factinternetsales f \nJOIN dimproduct p on f.ProductKey = p.ProductKey \nJOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey \nJOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey \nWHERE pc.EnglishProductCategoryName = '{selected_category}'\nGROUP BY psc.EnglishProductSubcategoryName ;")
+    ## Scatter plot
+    st.markdown("<span style='color:green; font-weight:bold;'>The Relation between Employee's Gender and Rate</span>",unsafe_allow_html=True)
+    st.write("- **Chart type:** Relationship - Scatter Plot \n- **Description:** Shows the correlation between employee gender and the salary received. This visualization answers whether gender affects employee salary. \n- **Code:**")
+    st.code("SELECT EmployeeKey AS EmployeeID, Gender , BaseRate \nFROM dimemployee \nORDER BY EmployeeID;")
+  
 # Metrics Row
 col1, col2, col3, col4 = st.columns(4)
 with col1:
