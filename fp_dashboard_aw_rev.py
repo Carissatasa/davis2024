@@ -29,9 +29,7 @@ def format_number(num):
 # Koneksi ke database
 try:
     mydb = st.connection("mydb", type="sql", autocommit=True)  
-except KeyError as key_err:
-    st.error(f"KeyError: {key_err}")
-else:
+    
     mycursor = mydb.cursor()
 
     # Query untuk mendapatkan daftar nama territory dan tahun
@@ -146,7 +144,8 @@ else:
     df_sales['TotalProductSold'] = df_sales['TotalProductSold'].astype(float)  # Convert to float for JSON serialization
     df_line_chart = pd.DataFrame(line_chart_result, columns=["OrderYear", "TotalProductSold"])
     df_scatter = pd.DataFrame(scatter_result, columns=["EmployeeID", "Gender", "BaseRate"])
-
+except KeyError as key_err:
+    st.error(f"KeyError: {key_err}")
 #######################
 # Main Panel
 
