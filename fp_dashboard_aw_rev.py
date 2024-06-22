@@ -29,8 +29,8 @@ def format_number(num):
 # Koneksi ke database
 try:
     mydb = st.connection("mydb", type="sql", autocommit=True)  
-# except Exception as err:
-#     st.error(f"Error: {err}")
+except KeyError as key_err:
+    st.error(f"KeyError: {key_err}")
 else:
     mycursor = mydb.cursor()
 
