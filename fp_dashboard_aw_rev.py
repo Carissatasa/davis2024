@@ -28,12 +28,9 @@ def format_number(num):
 #######################
 # Koneksi ke database
 try:
-    mydb = st.connection("mydb", type="sql")  # Menggunakan st.connections
-except Exception as err:
-    st.error(f"Error: {err}")
-else:
-    mycursor = mydb.cursor()
-
+    # Menggunakan st.connections untuk koneksi rahasia
+    mydb = st.experimental_connection("mydb")
+    
     # Query untuk mendapatkan daftar nama territory dan tahun
     query_category_product = """
     SELECT distinct pc.EnglishProductCategoryName
@@ -42,8 +39,7 @@ else:
     join dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey 
     join dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey;
     """
-    mycursor.execute(query_category_product)
-    result_category_product = mycursor.fetchall()
+    result_category_product = mydb.query(query_category_product).fetchall()
 
     category_list = sorted(set([row[0] for row in result_category_product]))
     category_list.insert(0, 'All')  # Tambahkan opsi 'All' sebagai elemen pertama
@@ -104,7 +100,7 @@ else:
             FROM factinternetsales f
             JOIN dimproduct p ON f.ProductKey = p.ProductKey 
             JOIN dimproductsubcategory psc on p.ProductSubcategoryKey = psc.ProductSubcategoryKey 
-            JOIN dimproductcategory pc ON psc.ProductCategoryKey = pc.ProductCategoryKey
+            JOIN dimproductcategory pc on psc.ProductCategoryKey = pc.ProductCategoryKey
             JOIN dimsalesterritory st ON f.SalesTerritoryKey = st.SalesTerritoryKey 
             JOIN dimcustomer c on f.CustomerKey = c.CustomerKey
             WHERE pc.EnglishProductCategoryName = '{selected_category}'
@@ -127,25 +123,20 @@ else:
             ORDER BY EmployeeID;
             """
 
-        mycursor.execute(query_sales)
-        myresult = mycursor.fetchall()
-
-        mycursor.execute(query_line_chart)
-        line_chart_result = mycursor.fetchall()
-        
-        mycursor.execute(query_scatter)
-        scatter_result = mycursor.fetchall()
-
-    
-    # Tutup cursor dan koneksi
-    mycursor.close()
-    mydb.close()
+        sales_result = mydb.query(query_sales).fetchall()
+        line_chart_result = mydb.query(query_line_chart).fetchall()
+        scatter_result = mydb.query(query_scatter).fetchall()
 
     # Konversi hasil query ke DataFrame
-    df_sales = pd.DataFrame(myresult, columns=["TotalProductSold", "TotalCustomer", "Region", "ProductName", "ProductSubCategory", "ProductCategory", "CustomerKey", "Gender", "ProductKey"])
+    df_sales = pd.DataFrame(sales_result, columns=["TotalProductSold", "TotalCustomer", "Region", "ProductName", "ProductSubCategory", "ProductCategory", "CustomerKey", "Gender", "ProductKey"])
     df_sales['TotalProductSold'] = df_sales['TotalProductSold'].astype(float)  # Convert to float for JSON serialization
     df_line_chart = pd.DataFrame(line_chart_result, columns=["OrderYear", "TotalProductSold"])
     df_scatter = pd.DataFrame(scatter_result, columns=["EmployeeID", "Gender", "BaseRate"])
+
+except Exception as e:
+    st.error(f"Error: {e}")
+
+   
 
 #######################
 # Main Panel
