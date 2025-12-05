@@ -219,7 +219,7 @@ with col1:
         st.dataframe(
             top_product.reset_index(),
             hide_index=True,
-            width=None,
+            
             column_config={
                 "ProductName": st.column_config.TextColumn("Product Name"),
                 "TotalProductSold": st.column_config.ProgressColumn(
@@ -259,3 +259,4 @@ with col2:
     scatter_chart = px.scatter(df_scatter, x='EmployeeID', y='BaseRate', color='Gender')
     scatter_chart.update_layout(width=600)
     st.plotly_chart(scatter_chart)
+
